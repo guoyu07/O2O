@@ -9,8 +9,15 @@
  * @version V1.0
  * @date 2015-07-06 16:50
  */
+use eYaf\Request;
+use eYaf\Layout;
+
 class Bootstrap extends Yaf_Bootstrap_Abstract {
     private $_config;
+
+    public function _initErrorHandler(Yaf_Dispatcher $dispatcher) {
+        $dispatcher->setErrorHandler(array(get_class($this)), 'error_handler');
+    }
 
     public function _initConfig() {
         //把配置保存起来
@@ -56,5 +63,36 @@ class Bootstrap extends Yaf_Bootstrap_Abstract {
 
     public function _initSession($dispatcher) {
         //Yaf_Session::getInstance()->start();
+    }
+
+    /**
+     * Custom error handler.
+     *
+     * Catches all errors(not exceptions) and creates and ErrorException.
+     * ErrorException then can caught by Yaf_ErrorController
+     *
+     * @param integer $errno    the error number.
+     * @param string  $errstr   the error message.
+     * @param string  $errfile  the file where error occured.
+     * @param integer $errline  the line of the file where error occured.
+     *
+     * @throws ErrorException
+     */
+    public static function error_handler($errno, $errstr, $errfile, $errline) {
+        // Do not throw exception if error was prepended by @
+        //
+        // See {@link http://www.php.net/set_error_handler}
+        //
+        // error_reporting() settings will have no effect and your error handler
+        // will be called regardless - however you are still able to read
+        // the current value of error_reporting and act appropriately.
+        // Of particular note is that this value will be 0
+        // if the statement that caused the error was prepended
+        // by the @ error-control operator.
+        if(error_reporting() === 0) {
+            return;
+        }
+
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 }
