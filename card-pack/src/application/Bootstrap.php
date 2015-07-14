@@ -16,7 +16,7 @@ class Bootstrap extends Yaf_Bootstrap_Abstract {
     private $_config;
 
     public function _initErrorHandler(Yaf_Dispatcher $dispatcher) {
-        $dispatcher->setErrorHandler(array(get_class($this)), 'error_handler');
+        $dispatcher->setErrorHandler(array(get_class($this), 'error_handler'), 1);
     }
 
     public function _initConfig() {
