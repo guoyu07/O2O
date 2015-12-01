@@ -40,7 +40,7 @@ class Bootstrap extends Yaf_Bootstrap_Abstract {
             "simple", new Yaf_Route_Simple("m", "c", "a")
         );
         $route = new Yaf_Route_Rewrite(
-            "/index/get",
+            "/auditlog/list/:id/:name",
             array(
                 "controller" => "item",
                 "action" => "get"
